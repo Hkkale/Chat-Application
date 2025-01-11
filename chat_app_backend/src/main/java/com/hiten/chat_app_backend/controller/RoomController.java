@@ -1,5 +1,6 @@
 package com.hiten.chat_app_backend.controller;
 
+import com.hiten.chat_app_backend.config.ChatAppConstants;
 import com.hiten.chat_app_backend.entities.Message;
 import com.hiten.chat_app_backend.entities.Room;
 import com.hiten.chat_app_backend.service.RoomService;
@@ -11,7 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/rooms")
-@CrossOrigin("http://localhost:5173")
+@CrossOrigin(ChatAppConstants.FRONT_END_BASE_URL)
 public class RoomController {
 
     private final RoomService roomService;

@@ -8,6 +8,7 @@ import SockJS from "sockjs-client";
 import { Stomp } from "@stomp/stompjs";
 import { baseURL } from "../config/AxiosHelper";
 import { getMessages } from "../services/RoomService";
+import { timeAgo } from "../config/Helper";
 
 function ChatPage() {
 
@@ -133,6 +134,14 @@ function ChatPage() {
   }
 
 
+  function handleKeyDown(e){
+    if(e.key==='Enter'){
+      sendMessage()
+
+    }
+  }
+
+
 
 
   return (
@@ -176,6 +185,7 @@ function ChatPage() {
                   <div className=" flex flex-col ">
                     <p className="text-xs font-bold">{message.sender}</p>
                     <p className="text-sm">{message.content}</p>
+                    <p className="text-xs text-gray-400">{timeAgo(message.timeStamp)}</p>
                   </div>
                 </div>
               </div>
@@ -191,6 +201,7 @@ function ChatPage() {
           <input
             value={input}
             onChange={(e)=>setInput(e.target.value)}
+            onKeyDown={handleKeyDown}
             type="text"
             placeholder="Type your message here..."
             className="border-gray-600 border bg-gray-800 px-3 py-2 rounded-full w-full h-full text-sm focus:outline-none"

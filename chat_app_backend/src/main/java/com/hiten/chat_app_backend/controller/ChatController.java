@@ -1,5 +1,6 @@
 package com.hiten.chat_app_backend.controller;
 
+import com.hiten.chat_app_backend.config.ChatAppConstants;
 import com.hiten.chat_app_backend.entities.Message;
 import com.hiten.chat_app_backend.entities.Room;
 import com.hiten.chat_app_backend.playload.MessageRequest;
@@ -15,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import java.time.LocalDateTime;
 
 @Controller
-@CrossOrigin("http://localhost:5173")
+@CrossOrigin(ChatAppConstants.FRONT_END_BASE_URL)
 
 public class ChatController {
 
