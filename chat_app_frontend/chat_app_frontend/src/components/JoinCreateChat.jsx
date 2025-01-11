@@ -1,13 +1,19 @@
 import React, { useState } from 'react'
 import chatIcon from '../assets/speak.png'
 import toast from 'react-hot-toast'
-import { createRoomApi } from '../services/RoomService'
+import { createRoomApi, joinChatApi } from '../services/RoomService'
+import useChatContext from '../context/ChatContext'
+import { useNavigate } from 'react-router-dom'
 
 const JoinCreateChat = () => {
   const [detail,setDetail]= useState({
     roomId:"",
     userName:"",
   })
+
+  const {roomId,setRoomId, currentUser, setCurrentUser,connected, setConnected}= useChatContext();
+
+  const navigate= useNavigate();
 
   function handleFormInputChange(event){
     setDetail({
@@ -17,10 +23,33 @@ const JoinCreateChat = () => {
 
   }
 
-  function joinChat(){
+   async function joinChat(){
 
     if(validateForm()){
       // join chat
+
+      try {
+
+        const room =await joinChatApi(detail.roomId)
+        toast.success("Joined...")
+        setCurrentUser(detail.userName)
+        setRoomId(room.roomId)
+        setConnected(true)
+
+       navigate("/chat")
+        
+      } catch (error) {
+        if(error.status==400){
+          toast.error(error.response.data)
+        }
+        else{
+          toast.error("Error in Joining Room!!")
+
+        }
+        console.log(error)
+        
+        
+      }
     }
 
   }
@@ -32,13 +61,23 @@ const JoinCreateChat = () => {
       console.log(detail)
 
       try {
-       const response = await createRoomApi(detail)
+       const response = await createRoomApi(detail.roomId)
        console.log(response)
        toast.success("Room Created Sucessfully !")
-       joinChat()
+       setCurrentUser(detail.userName)
+       setRoomId(response.roomId)
+       setConnected(true)
+
+       navigate("/chat")
         
       } catch (error) {
         console.log(error)
+        if(error.status==400){
+          toast.error("Room Id Already Exists!!")
+        }
+        else{
+          toast.error("Error in Creating Room!!")
+        }
         console.log("Error in crteating Room !")
         
       }
